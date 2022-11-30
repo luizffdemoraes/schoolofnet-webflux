@@ -28,6 +28,10 @@ public class TodoController {
 
     @PostMapping
     public Mono<Todo> save(@RequestBody Todo todo) {
-      //  return this.todoRepository.save(todo);
+        Mono op = Mono.fromCallable(() -> this.transactionTemplate.execute(action -> {
+            Todo newTodo = this.todoRepository.save(todo);
+            return newTodo;
+        }));
+        return op;
     }
 }

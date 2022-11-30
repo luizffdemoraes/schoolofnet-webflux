@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Todo {
 
     @Id
-    @Column
+    @Column(name = "id", unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
