@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
@@ -29,6 +30,12 @@ public class TodoController {
     @ResponseBody
     public Mono<Optional<Todo>> findById(@PathVariable("id") Long id){
         return Mono.just(this.todoRepository.findById(id));
+    }
+
+    @GetMapping
+    @ResponseBody
+    public Flux<Todo> findAll(){
+        return Flux.defer(() -> Flux.fromIterable(this.todoRepository.findAll()).subscribeOn(jdbcScheduler));
     }
 
     @PostMapping
